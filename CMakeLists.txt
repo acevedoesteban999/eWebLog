@@ -5,7 +5,7 @@ idf_component_register(
     INCLUDE_DIRS 
         "include"
     
-    REQUIRE
+    REQUIRES
         eSTR
         eWeb
 )
