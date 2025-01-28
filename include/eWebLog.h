@@ -5,9 +5,8 @@
 #define EWEBLOG_DEFAULT_CAPACITY 1024
 
 #define EWEBLOG_HANDLERS(execution_funtion) \
-    {{"/weblog_get", HTTP_POST , execution_funtion , NULL}, true, {.uri_execution_function = eweblog_get_post_handler}}, \
+    {{"/weblog_get", HTTP_GET , execution_funtion , NULL}, true, {.uri_execution_function = eweblog_get_post_handler}}, \
 
-// Nuevas definiciones
 #define EWEBLOG_CHECK_INIT() do { \
     if (!eweblog_is_initialized) { \
         eweblog_init(EWEBLOG_DEFAULT_CAPACITY); \
@@ -16,7 +15,7 @@
 } while(0)
 
 extern eSTR EWEBLOG_STR;
-extern bool eweblog_is_initialized;  // Nueva variable global
+extern bool eweblog_is_initialized;
 
 void eweblog_init(unsigned CAPACITY);
 void eweblog_realocate(unsigned CAPACITY);

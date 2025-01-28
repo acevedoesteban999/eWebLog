@@ -1,7 +1,7 @@
 #include "eWebLog.h"
 
 eSTR EWEBLOG_STR;
-
+bool eweblog_is_initialized = false;
 
 void eweblog_init(unsigned CAPACITY){
     estr_init(&EWEBLOG_STR);
@@ -29,9 +29,14 @@ void eweblog_add_str(eSTR*str){
 
 void eweblog_add_buff(char* buff, unsigned len) {
     EWEBLOG_CHECK_INIT();
-    if (EWEBLOG_STR.length + len > EWEBLOG_STR.capacity)
+    if (EWEBLOG_STR.length + len > EWEBLOG_STR.capacity){
         estr_clear(&EWEBLOG_STR);
-    estr_append_str(&EWEBLOG_STR, false, buff);
+        if(len > EWEBLOG_STR.capacity)
+            return;
+    }
+    
+    estr_append_str(&EWEBLOG_STR, true, buff);
+    estr_append_str(&EWEBLOG_STR, true, "|");
 }
 
 
@@ -62,7 +67,7 @@ void eweblog_add_format(const char *format, ...) {
 esp_err_t eweblog_get_post_handler(httpd_req_t *req){
     EWEBLOG_CHECK_INIT();
     httpd_resp_set_type(req, "text/html");
-    eweb_send_resp_try_chunk_str(req, &EWEBLOG_STR);
+    eweb_send_resp_buff(req,EWEBLOG_STR.ptr_char,EWEBLOG_STR.length);
     return ESP_OK;
 }
 
